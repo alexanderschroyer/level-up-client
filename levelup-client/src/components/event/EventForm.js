@@ -6,14 +6,12 @@ import { getGames } from "../game/GameManager"
 
 export const EventForm = () => {
     const history = useHistory()
-    const currentUser = parseInt(localStorage.getItem("lu_token"))
     const [games, setGames] = useState([])
     const [currentEvent, setEvent] = useState({
         gameId: 0,
         description: "",
         date: "",
-        time: "",
-        organizer: ""
+        time: ""
     })
 
     useEffect(() => {
@@ -21,9 +19,9 @@ export const EventForm = () => {
         .then(data => setGames(data)) // TODO: Get all existing games from API
     }, [])
 
-    const changeEventState = (event) => {
+    const changeEventState = (domEvent) => {
         const newEventState = { ...currentEvent }
-        newEventState[event.target.name] = event.target.value
+        newEventState[domEvent.target.name] = domEvent.target.value
         setEvent(newEventState)
     }
 
@@ -39,7 +37,7 @@ export const EventForm = () => {
                         <option value="0">Select a game...</option>
                         {
                             games.map(game => (
-                                <option>{game.title}</option>
+                                <option value={game.id}>{game.title}</option>
                             ))
                         }
                     </select>
@@ -57,7 +55,7 @@ export const EventForm = () => {
             <fieldset>
                 <div className="form-group">
                     <label htmlFor="date">Date: </label>
-                    <input type="text" name="date" required autoFocus className="form-control" placeholder="YYYY-MM-DD"
+                    <input type="date" name="date" required autoFocus className="form-control" placeholder="YYYY-MM-DD"
                         value={currentEvent.date}
                         onChange={changeEventState}
                     />
@@ -66,7 +64,7 @@ export const EventForm = () => {
             <fieldset>
                 <div className="form-group">
                     <label htmlFor="time">Time: </label>
-                    <input type="text" name="time" required autoFocus className="form-control" placeholder="00:00:00"
+                    <input type="time" name="time" required autoFocus className="form-control" placeholder="00:00:00"
                         value={currentEvent.time}
                         onChange={changeEventState}
                     />
